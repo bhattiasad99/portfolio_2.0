@@ -36,19 +36,12 @@
   min-height: 100dvh;
   overflow: hidden;
   isolation: isolate;
-  background:
-    radial-gradient(
-      circle at top,
-      color-mix(in oklab, var(--portfolio-primary) 16%, transparent),
-      transparent 34%
-    ),
-    linear-gradient(
-      180deg,
-      color-mix(in oklab, var(--portfolio-bg-elevated) 88%, white) 0%,
-      var(--portfolio-bg) 58%,
-      color-mix(in oklab, var(--portfolio-bg) 82%, var(--portfolio-line)) 100%
-    );
+  background: var(--portfolio-bg);
   color: var(--portfolio-text);
+}
+
+.portfolioHexagon {
+  opacity: 0.9;
 }
 
 .loaderScreen {
@@ -255,7 +248,7 @@
 }
 
 .loaderScreenAnimation {
-  width: min(6rem, 28vw);
+  width: min(9rem, 34vw);
   max-width: 100%;
   aspect-ratio: 1;
   display: grid;
@@ -290,7 +283,7 @@
   }
 
   .loaderScreenAnimation {
-    width: min(5rem, 24vw);
+    width: min(7rem, 32vw);
   }
 
   .loaderScreenTerminal {

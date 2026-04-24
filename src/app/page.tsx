@@ -2,6 +2,7 @@
 
 import Lottie from "lottie-react";
 import { Component, type ReactNode, useEffect, useState } from "react";
+import { HexagonBackground } from "@/components/animate-ui/components/backgrounds/hexagon";
 import { cn } from "@/lib/utils";
 import styles from "./page.module.css";
 
@@ -149,7 +150,14 @@ export default function Home() {
 
   return (
     <main className={styles.pageScope}>
-      <div className={styles.portfolioShell}>
+      <HexagonBackground
+        className={styles.portfolioShell}
+        hexagonSize={96}
+        hexagonMargin={4}
+        hexagonProps={{
+          className: styles.portfolioHexagon,
+        }}
+      >
         {!isComplete && (
           <section
             className={cn(styles.loaderScreen, isExiting && styles.loaderScreenExit)}
@@ -218,7 +226,7 @@ export default function Home() {
         <section className={cn(styles.hero, showContent && styles.heroVisible)}>
           <h1 className={styles.heroTitle}>Hello world</h1>
         </section>
-      </div>
+      </HexagonBackground>
     </main>
   );
 }
