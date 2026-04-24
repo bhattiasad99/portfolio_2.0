@@ -1,0 +1,124 @@
+.pageScope {
+  --portfolio-bg: var(--background, #f7f8fc);
+  --portfolio-bg-elevated: var(--card, #ffffff);
+  --portfolio-text: var(--foreground, #0c1422);
+  --portfolio-muted: var(--muted-foreground, rgba(12, 20, 34, 0.48));
+  --portfolio-line: var(--border, rgba(12, 20, 34, 0.1));
+  --portfolio-primary: var(--primary, #456eff);
+  --portfolio-chart-1: var(--chart-1, #ff0080);
+  --portfolio-chart-2: var(--chart-2, #ff8c00);
+  --portfolio-chart-3: var(--chart-3, #ffd60a);
+  --portfolio-chart-4: var(--chart-4, #00c48c);
+  --portfolio-chart-5: var(--chart-5, #4c6ef5);
+  --hero-duration: 780ms;
+  --loader-duration: 700ms;
+  color: var(--portfolio-text);
+}
+
+.pageScope,
+.pageScope::before,
+.pageScope::after,
+.pageScope *,
+.pageScope *::before,
+.pageScope *::after {
+  box-sizing: border-box;
+}
+
+.pageScope button,
+.pageScope input,
+.pageScope textarea,
+.pageScope select {
+  font: inherit;
+}
+
+.portfolioShell {
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at top, color-mix(in oklab, var(--portfolio-primary) 16%, transparent), transparent 34%),
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--portfolio-bg-elevated) 88%, white) 0%,
+      var(--portfolio-bg) 58%,
+      color-mix(in oklab, var(--portfolio-bg) 82%, var(--portfolio-line)) 100%
+    );
+  color: var(--portfolio-text);
+}
+
+.loaderScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 50% 46%, color-mix(in oklab, var(--portfolio-chart-1) 16%, transparent), transparent 18%),
+    radial-gradient(circle at 50% 46%, color-mix(in oklab, var(--portfolio-chart-2) 16%, transparent), transparent 28%),
+    radial-gradient(circle at 50% 46%, color-mix(in oklab, var(--portfolio-chart-3) 16%, transparent), transparent 38%),
+    radial-gradient(circle at 50% 46%, color-mix(in oklab, var(--portfolio-chart-4) 16%, transparent), transparent 50%),
+    radial-gradient(circle at 50% 46%, color-mix(in oklab, var(--portfolio-chart-5) 16%, transparent), transparent 64%),
+    radial-gradient(circle at 50% 46%, color-mix(in oklab, var(--portfolio-primary) 14%, transparent), transparent 78%),
+    radial-gradient(circle at 50% 46%, color-mix(in oklab, var(--portfolio-bg-elevated) 78%, transparent), transparent 32%),
+    radial-gradient(circle at 50% 46%, transparent, color-mix(in oklab, var(--portfolio-bg-elevated) 44%, transparent) 82%),
+    linear-gradient(
+      160deg,
+      color-mix(in oklab, var(--portfolio-bg-elevated) 96%, white),
+      color-mix(in oklab, var(--portfolio-bg) 92%, var(--portfolio-bg-elevated))
+    ),
+    var(--portfolio-bg);
+  transform: translateY(0);
+  transition: transform var(--loader-duration) cubic-bezier(0.77, 0, 0.18, 1);
+}
+
+.loaderScreenExit {
+  transform: translateY(-100%);
+}
+
+.loaderScreenInner {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: center;
+  text-align: center;
+}
+
+.loaderScreenLabel {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--portfolio-muted);
+}
+
+.loaderScreenProgress {
+  margin: 0;
+  font-size: clamp(4rem, 16vw, 10rem);
+  line-height: 0.9;
+  font-weight: 600;
+  letter-spacing: -0.06em;
+}
+
+.hero {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  opacity: 0;
+  transform: translateY(64px) scale(0.98);
+  transition:
+    opacity var(--hero-duration) ease,
+    transform var(--hero-duration) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.heroVisible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.heroTitle {
+  margin: 0;
+  font-size: clamp(3rem, 12vw, 7rem);
+  font-weight: 600;
+  letter-spacing: -0.07em;
+}

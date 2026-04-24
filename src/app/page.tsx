@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
+import styles from "./page.module.css";
 
 const TOTAL_DURATION_MS = 2300;
 const HOLD_DURATION_MS = 400;
@@ -15,8 +17,8 @@ export default function Home() {
 
   useEffect(() => {
     let animationFrame = 0;
-    let exitTimeout: ReturnType<typeof window.setTimeout> | undefined;
-    let contentTimeout: ReturnType<typeof window.setTimeout> | undefined;
+    let exitTimeout: number | undefined;
+    let contentTimeout: number | undefined;
     const startTime = performance.now();
 
     const tick = (currentTime: number) => {
@@ -59,22 +61,24 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="portfolio-shell">
+    <main className={styles.pageScope}>
+      <div className={styles.portfolioShell}>
       {!isComplete && (
         <section
-          className={`loader-screen${isExiting ? " loader-screen--exit" : ""}`}
+          className={cn(styles.loaderScreen, isExiting && styles.loaderScreenExit)}
           aria-label="Loading portfolio"
         >
-          <div className="loader-screen__inner">
-            <p className="loader-screen__label">Loading</p>
-            <p className="loader-screen__progress">{progress}%</p>
+          <div className={styles.loaderScreenInner}>
+            <p className={styles.loaderScreenLabel}>Loading</p>
+            <p className={styles.loaderScreenProgress}>{progress}%</p>
           </div>
         </section>
       )}
 
-      <section className={`hero${showContent ? " hero--visible" : ""}`}>
-        <h1>Hello world</h1>
+      <section className={cn(styles.hero, showContent && styles.heroVisible)}>
+        <h1 className={styles.heroTitle}>Hello world</h1>
       </section>
+      </div>
     </main>
   );
 }
