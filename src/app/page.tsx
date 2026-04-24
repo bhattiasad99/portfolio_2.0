@@ -150,79 +150,79 @@ export default function Home() {
 
   return (
     <main className={styles.pageScope}>
-      <HexagonBackground
-        className={styles.portfolioShell}
-        hexagonSize={96}
-        hexagonMargin={4}
-        hexagonProps={{
-          className: styles.portfolioHexagon,
-        }}
-      >
-        {!isComplete && (
-          <section
-            className={cn(styles.loaderScreen, isExiting && styles.loaderScreenExit)}
-            aria-label="Loading portfolio"
-          >
-            <div className={styles.loaderScreenInner}>
-              <div className={styles.loaderScreenTerminalFrame}>
-                <div className={styles.loaderScreenTerminalBar}>
-                  <div className={styles.loaderScreenTerminalDots} aria-hidden="true">
-                    <span className={cn(styles.loaderScreenTerminalDot, styles.loaderScreenTerminalDotRed)} />
-                    <span className={cn(styles.loaderScreenTerminalDot, styles.loaderScreenTerminalDotYellow)} />
-                    <span className={cn(styles.loaderScreenTerminalDot, styles.loaderScreenTerminalDotGreen)} />
-                  </div>
-                  <span className={styles.loaderScreenTerminalTitle}>asad-zubair-bhatti — bash</span>
-                </div>
-                <div className={styles.loaderScreenTerminalBody}>
-                  <div className={styles.loaderScreenTerminalLine}>
-                    <span className={styles.loaderScreenTerminalPrompt}>
-                      <span className={styles.loaderScreenTerminalPromptUser}>Asad-Zubair-Bhatti</span>
-                      <span className={styles.loaderScreenTerminalPromptAccent}>:</span>
-                      <span className={styles.loaderScreenTerminalPromptPath}>~</span>
-                      <span className={styles.loaderScreenTerminalPromptSymbol}>$</span>{" "}
-                    </span>
-                    <span>{typedCommand}</span>
-                    {showCursor ? <span className={styles.loaderScreenTerminalCursor} /> : null}
-                  </div>
 
-                  {visibleOutputs.map((line) => (
-                    <div
-                      key={line}
-                      className={cn(
-                        styles.loaderScreenTerminalOutput,
-                        styles.loaderScreenTerminalOutputVisible,
-                      )}
-                    >
-                      {line}
-                    </div>
-                  ))}
+      {!isComplete && (
+        <section
+          className={cn(styles.loaderScreen, isExiting && styles.loaderScreenExit)}
+          aria-label="Loading portfolio"
+        >
+          <div className={styles.loaderScreenInner}>
+            <div className={styles.loaderScreenTerminalFrame}>
+              <div className={styles.loaderScreenTerminalBar}>
+                <div className={styles.loaderScreenTerminalDots} aria-hidden="true">
+                  <span className={cn(styles.loaderScreenTerminalDot, styles.loaderScreenTerminalDotRed)} />
+                  <span className={cn(styles.loaderScreenTerminalDot, styles.loaderScreenTerminalDotYellow)} />
+                  <span className={cn(styles.loaderScreenTerminalDot, styles.loaderScreenTerminalDotGreen)} />
                 </div>
+                <span className={styles.loaderScreenTerminalTitle}>asad-zubair-bhatti — bash</span>
               </div>
+              <div className={styles.loaderScreenTerminalBody}>
+                <div className={styles.loaderScreenTerminalLine}>
+                  <span className={styles.loaderScreenTerminalPrompt}>
+                    <span className={styles.loaderScreenTerminalPromptUser}>Asad-Zubair-Bhatti</span>
+                    <span className={styles.loaderScreenTerminalPromptAccent}>:</span>
+                    <span className={styles.loaderScreenTerminalPromptPath}>~</span>
+                    <span className={styles.loaderScreenTerminalPromptSymbol}>$</span>{" "}
+                  </span>
+                  <span>{typedCommand}</span>
+                  {showCursor ? <span className={styles.loaderScreenTerminalCursor} /> : null}
+                </div>
 
-              <div className={styles.loaderScreenMeta}>
-                {!hasLottieError && loadingAnimation ? (
-                  <LoaderLottieBoundary onError={() => setHasLottieError(true)}>
-                    <div className={styles.loaderScreenAnimation} aria-hidden="true">
-                      <Lottie
-                        animationData={loadingAnimation}
-                        autoplay
-                        loop
-                        onDataFailed={() => setHasLottieError(true)}
-                        className={styles.loaderScreenAnimationPlayer}
-                        rendererSettings={{
-                          preserveAspectRatio: "xMidYMid meet",
-                        }}
-                      />
-                    </div>
-                  </LoaderLottieBoundary>
-                ) : null}
-                {/* <p className={styles.loaderScreenLabel}>Loading</p> */}
-                <p className={styles.loaderScreenProgress}>{progress}%</p>
+                {visibleOutputs.map((line) => (
+                  <div
+                    key={line}
+                    className={cn(
+                      styles.loaderScreenTerminalOutput,
+                      styles.loaderScreenTerminalOutputVisible,
+                    )}
+                  >
+                    {line}
+                  </div>
+                ))}
               </div>
             </div>
-          </section>
-        )}
 
+            <div className={styles.loaderScreenMeta}>
+              <p className={styles.loaderScreenProgress}>{progress}%</p>
+              {!hasLottieError && loadingAnimation ? (
+                <LoaderLottieBoundary onError={() => setHasLottieError(true)}>
+                  <div className={styles.loaderScreenAnimation} aria-hidden="true">
+                    <Lottie
+                      animationData={loadingAnimation}
+                      autoplay
+                      loop
+                      onDataFailed={() => setHasLottieError(true)}
+                      className={styles.loaderScreenAnimationPlayer}
+                      rendererSettings={{
+                        preserveAspectRatio: "xMidYMid meet",
+                      }}
+                    />
+                  </div>
+                </LoaderLottieBoundary>
+              ) : null}
+              {/* <p className={styles.loaderScreenLabel}>Loading</p> */}
+            </div>
+          </div>
+        </section>
+      )}
+      <HexagonBackground
+        // className={styles.portfolioShell}
+        hexagonSize={96}
+        hexagonMargin={4}
+      // hexagonProps={{
+      //   className: styles.portfolioHexagon,
+      // }}
+      >
         <section className={cn(styles.hero, showContent && styles.heroVisible)}>
           <h1 className={styles.heroTitle}>Hello world</h1>
         </section>

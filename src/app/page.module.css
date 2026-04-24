@@ -36,12 +36,51 @@
   min-height: 100dvh;
   overflow: hidden;
   isolation: isolate;
-  background: var(--portfolio-bg);
+  background:
+    radial-gradient(
+      circle at top,
+      color-mix(in oklab, var(--portfolio-primary) 10%, transparent),
+      transparent 32%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--portfolio-bg-elevated) 90%, white) 0%,
+      var(--portfolio-bg) 100%
+    );
   color: var(--portfolio-text);
 }
 
 .portfolioHexagon {
-  opacity: 0.9;
+  opacity: 1;
+}
+
+.portfolioHexagon::before {
+  background: color-mix(
+    in oklab,
+    var(--portfolio-primary) 14%,
+    var(--portfolio-line)
+  );
+  opacity: 1;
+}
+
+.portfolioHexagon::after {
+  background: color-mix(in oklab, var(--portfolio-bg) 92%, white);
+}
+
+.portfolioHexagon:hover::before {
+  background: color-mix(
+    in oklab,
+    var(--portfolio-primary) 28%,
+    var(--portfolio-line)
+  );
+}
+
+.portfolioHexagon:hover::after {
+  background: color-mix(
+    in oklab,
+    var(--portfolio-bg) 86%,
+    var(--portfolio-bg-elevated)
+  );
 }
 
 .loaderScreen {
@@ -243,16 +282,17 @@
 
 .loaderScreenMeta {
   display: grid;
-  gap: 0.35rem;
+  gap: 0.1rem;
   justify-items: center;
 }
 
 .loaderScreenAnimation {
-  width: min(9rem, 34vw);
+  width: min(14rem, 28vw);
   max-width: 100%;
   aspect-ratio: 1;
   display: grid;
   place-items: center;
+  margin-bottom: -0.3rem;
 }
 
 .loaderScreenAnimationPlayer {
@@ -283,7 +323,8 @@
   }
 
   .loaderScreenAnimation {
-    width: min(7rem, 32vw);
+    width: min(5.75rem, 26vw);
+    margin-bottom: -0.2rem;
   }
 
   .loaderScreenTerminal {
@@ -310,6 +351,9 @@
 }
 
 .hero {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
   min-height: 100dvh;
   display: grid;
   place-items: center;
