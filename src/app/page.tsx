@@ -1,10 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { HexagonBackground } from "@/components/animate-ui/components/backgrounds/hexagon";
 import LoadingScreen from "@/components/use-case/LoadingScreen";
-import { cn } from "@/lib/utils";
-import styles from "./page.module.css";
 import Hero from "@/components/use-case/Hero";
 
 export default function Home() {
@@ -14,18 +11,9 @@ export default function Home() {
   }, []);
 
   return (
-    <main className={styles.pageScope}>
+    <main className="portfolio-page-scope min-h-dvh text-[var(--portfolio-text)] h-[200vh]">
       <LoadingScreen onRevealContent={handleRevealContent} />
-      <HexagonBackground
-        className={styles.portfolioShell}
-        hexagonSize={96}
-        hexagonMargin={4}
-        hexagonProps={{
-          className: styles.portfolioHexagon,
-        }}
-      >
-        <Hero showContent={showContent} />
-      </HexagonBackground>
+      <Hero showContent={showContent} />
     </main>
   );
 }

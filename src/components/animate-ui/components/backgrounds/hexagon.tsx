@@ -10,43 +10,14 @@ type HexagonBackgroundProps = React.ComponentProps<'div'> & {
   hexagonMargin?: number;
 };
 
-type ViewportSnapshot = {
-  width: number;
-  height: number;
+const subscribeToViewport = (callback: () => void) => {
+  window.addEventListener('resize', callback);
+
+  return () => window.removeEventListener('resize', callback);
 };
 
-const EMPTY_VIEWPORT: ViewportSnapshot = {
-  width: 0,
-  height: 0,
-};
-
-function subscribeToViewportSize(onStoreChange: () => void) {
-  window.addEventListener('resize', onStoreChange);
-  return () => window.removeEventListener('resize', onStoreChange);
-}
-
-function getViewportSnapshot(): ViewportSnapshot {
-  return {
-    width: window.innerWidth,
-    height: window.innerHeight,
-  };
-}
-
-let cachedViewportSnapshot: ViewportSnapshot = EMPTY_VIEWPORT;
-
-function getCachedViewportSnapshot(): ViewportSnapshot {
-  const nextSnapshot = getViewportSnapshot();
-
-  if (
-    cachedViewportSnapshot.width === nextSnapshot.width &&
-    cachedViewportSnapshot.height === nextSnapshot.height
-  ) {
-    return cachedViewportSnapshot;
-  }
-
-  cachedViewportSnapshot = nextSnapshot;
-  return cachedViewportSnapshot;
-}
+const getViewportSnapshot = () => `${window.innerWidth}:${window.innerHeight}`;
+const getServerViewportSnapshot = () => '0:0';
 
 function HexagonBackground({
   className,
@@ -63,18 +34,17 @@ function HexagonBackground({
   const computedMarginTop = baseMarginTop + hexagonMargin;
   const oddRowMarginLeft = -(hexagonSize / 2);
   const evenRowMarginLeft = hexagonMargin / 2;
-  const viewport = React.useSyncExternalStore(
-    subscribeToViewportSize,
-    getCachedViewportSnapshot,
-    () => EMPTY_VIEWPORT,
+
+  const viewportSnapshot = React.useSyncExternalStore(
+    subscribeToViewport,
+    getViewportSnapshot,
+    getServerViewportSnapshot,
   );
-  const gridDimensions = React.useMemo(
-    () => ({
-      rows: Math.ceil(viewport.height / rowSpacing),
-      columns: Math.ceil(viewport.width / hexagonWidth) + 1,
-    }),
-    [viewport.height, viewport.width, rowSpacing, hexagonWidth],
-  );
+  const [viewportWidth, viewportHeight] = viewportSnapshot.split(':').map(Number);
+  const gridDimensions = {
+    rows: Math.ceil(viewportHeight / rowSpacing),
+    columns: Math.ceil(viewportWidth / hexagonWidth) + 1,
+  };
 
   return (
     <div

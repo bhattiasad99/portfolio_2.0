@@ -83,6 +83,22 @@
   --sidebar-ring: oklch(0.705 0.015 286.067);
 }
 
+.portfolio-page-scope {
+  --portfolio-bg: var(--background, #f7f8fc);
+  --portfolio-bg-elevated: var(--card, #ffffff);
+  --portfolio-text: var(--foreground, #0c1422);
+  --portfolio-muted: var(--muted-foreground, rgba(12, 20, 34, 0.48));
+  --portfolio-line: var(--border, rgba(12, 20, 34, 0.1));
+  --portfolio-primary: var(--primary, #456eff);
+  --portfolio-chart-1: var(--chart-1, #ff0080);
+  --portfolio-chart-2: var(--chart-2, #ff8c00);
+  --portfolio-chart-3: var(--chart-3, #ffd60a);
+  --portfolio-chart-4: var(--chart-4, #00c48c);
+  --portfolio-chart-5: var(--chart-5, #4c6ef5);
+  --hero-duration: 780ms;
+  --loader-duration: 700ms;
+}
+
 .dark {
   --background: oklch(0.141 0.005 285.823);
   --foreground: oklch(0.985 0 0);
