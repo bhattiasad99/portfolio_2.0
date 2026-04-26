@@ -10,6 +10,7 @@ import {
 import { cn } from "@/lib/utils";
 import HeroBackground from "@/components/custom/templates/HeroBackground";
 import { Button } from "@/components/ui/button";
+import { BackgroundGradient } from "@/components/ui/background-gradient";
 
 type IProps = {
     showContent: boolean;
@@ -78,7 +79,11 @@ const Hero: FC<IProps> = ({ showContent }) => {
                     <div className="relative mx-auto grid w-full max-w-[420px] place-items-center lg:max-w-[460px]">
                         <div className="absolute -inset-6 border border-[var(--portfolio-line)] bg-[var(--portfolio-bg-elevated)]/40 shadow-[0_24px_80px_rgba(15,23,42,0.12)] backdrop-blur-sm [clip-path:polygon(50%_0%,100%_25%,100%_75%,50%_100%,0%_75%,0%_25%)]" />
                         <div className="absolute inset-8 border border-[var(--portfolio-primary)]/25 [clip-path:polygon(50%_0%,100%_25%,100%_75%,50%_100%,0%_75%,0%_25%)]" />
-                        <div className="relative aspect-square w-full overflow-hidden border border-white/70 bg-[linear-gradient(145deg,rgba(255,255,255,0.94),rgba(255,255,255,0.58))] shadow-[0_28px_90px_rgba(15,23,42,0.18)] backdrop-blur-md">
+                        <BackgroundGradient
+                            animate={true}
+                            containerClassName="relative w-full shadow-[0_28px_90px_rgba(15,23,42,0.18)]"
+                            className="aspect-square overflow-hidden rounded-sm border-[6px] border-neutral-200 bg-[linear-gradient(145deg,rgba(255,255,255,0.96),rgba(255,255,255,0.64))] ring-1 ring-[var(--portfolio-text)]/15 backdrop-blur-md"
+                        >
                             <Image
                                 src="/img/hero.png"
                                 alt="Portrait of Asad Zubair Bhatti"
@@ -88,13 +93,13 @@ const Hero: FC<IProps> = ({ showContent }) => {
                                 sizes="(min-width: 1024px) 460px, min(86vw, 420px)"
                                 className="size-full object-cover"
                             />
-                        </div>
-                        <div className="absolute -bottom-5 left-4 border border-[var(--portfolio-line)] bg-[var(--portfolio-bg-elevated)]/85 px-4 py-3 text-left shadow-[0_18px_50px_rgba(15,23,42,0.14)] backdrop-blur-md sm:left-8">
-                            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--portfolio-muted)]">
+                        </BackgroundGradient>
+                        <div className="absolute -bottom-5 left-4 border border-white/80 z-10 bg-[linear-gradient(135deg,rgba(255,255,255,0.94),rgba(255,255,255,0.72))] px-5 py-4 text-left shadow-[0_18px_60px_rgba(15,23,42,0.2)] ring-1 ring-[var(--portfolio-text)]/10 backdrop-blur-xl backdrop-saturate-150 sm:left-8">
+                            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--portfolio-text)]/55">
                                 AI + Cloud
                             </p>
-                            <p className="mt-1 text-sm font-semibold text-[var(--portfolio-text)]">
-                                Product-minded engineering
+                            <p className="mt-1 text-sm font-semibold text-[var(--portfolio-text)] sm:text-base">
+                                Product Minded engineering
                             </p>
                         </div>
                     </div>

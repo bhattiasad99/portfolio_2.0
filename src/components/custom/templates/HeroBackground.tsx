@@ -11,11 +11,14 @@ type HexagonBackgroundProps = {
 
 const HexagonBackgroundComponent: FC<HexagonBackgroundProps> = ({ children }) => {
     return (
-        <HexagonBackground hexagonSize={96} hexagonMargin={4}>
+        <HexagonBackground
+            backgroundClassName="[mask-image:linear-gradient(to_bottom,#000_0%,#000_62%,transparent_88%)] [-webkit-mask-image:linear-gradient(to_bottom,#000_0%,#000_62%,transparent_88%)]"
+            hexagonSize={96}
+            hexagonMargin={4}
+        >
             <div className="pointer-events-none relative z-[2]">
                 {children}
             </div>
-            <div className="pointer-events-none absolute inset-x-0 -bottom-px z-[3] h-[34dvh] min-h-72 bg-[linear-gradient(to_bottom,rgba(255,255,255,0),var(--portfolio-bg)_72%,var(--portfolio-bg))]" />
         </HexagonBackground>
     )
 }

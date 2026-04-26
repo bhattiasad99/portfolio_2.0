@@ -5,6 +5,7 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 type HexagonBackgroundProps = React.ComponentProps<'div'> & {
+  backgroundClassName?: string;
   hexagonProps?: React.ComponentProps<'div'>;
   hexagonSize?: number; // value greater than 50
   hexagonMargin?: number;
@@ -20,6 +21,7 @@ const getViewportSnapshot = () => `${window.innerWidth}:${window.innerHeight}`;
 const getServerViewportSnapshot = () => '0:0';
 
 function HexagonBackground({
+  backgroundClassName,
   className,
   children,
   hexagonProps,
@@ -50,13 +52,13 @@ function HexagonBackground({
     <div
       data-slot="hexagon-background"
       className={cn(
-        'relative size-full overflow-hidden dark:bg-neutral-900 bg-neutral-100',
+        'relative size-full overflow-hidden bg-[var(--portfolio-bg)] dark:bg-neutral-900',
         className,
       )}
       {...props}
     >
       <style>{`:root { --hexagon-margin: ${hexagonMargin}px; }`}</style>
-      <div className="absolute top-0 -left-0 size-full overflow-hidden">
+      <div className={cn("absolute top-0 -left-0 size-full overflow-hidden", backgroundClassName)}>
         {Array.from({ length: gridDimensions.rows }).map((_, rowIndex) => (
           <div
             key={`row-${rowIndex}`}
