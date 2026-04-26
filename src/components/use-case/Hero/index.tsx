@@ -8,6 +8,7 @@ import {
 } from "@remixicon/react";
 
 import { cn } from "@/lib/utils";
+import { TextEffect } from "@/components/core/text-effect";
 import HeroBackground from "@/components/custom/templates/HeroBackground";
 import { Button } from "@/components/ui/button";
 import { BackgroundGradient } from "@/components/ui/background-gradient";
@@ -28,15 +29,22 @@ const Hero: FC<IProps> = ({ showContent }) => {
                 <div className="grid w-full max-w-6xl items-center gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:gap-16">
                     <div className="mx-auto max-w-2xl text-center lg:mx-0 lg:text-left">
                         <p className="mb-5 inline-flex items-center border border-[var(--portfolio-line)] bg-[var(--portfolio-bg-elevated)]/75 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--portfolio-muted)] shadow-[0_16px_60px_rgba(15,23,42,0.08)] backdrop-blur-md">
-                            Full-stack developer
+                            Software developer
                         </p>
 
-                        <h1 className="m-0 text-balance text-[clamp(3.25rem,9vw,6.75rem)] font-semibold leading-[0.88] tracking-[-0.07em]">
-                            Asad Zubair Bhatti
-                        </h1>
+                        {showContent && (
+                            <TextEffect
+                                per="word"
+                                as="h1"
+                                preset="blur"
+                                className="m-0 text-balance text-[clamp(3.25rem,9vw,6.75rem)] font-semibold leading-[0.88] tracking-[-0.07em]"
+                            >
+                                Asad Zubair Bhatti
+                            </TextEffect>
+                        )}
 
                         <p className="mx-auto mt-6 max-w-xl text-balance text-lg font-medium leading-8 text-[var(--portfolio-muted)] sm:text-xl lg:mx-0">
-                            Full-stack developer building AI-powered, cloud-ready products that feel sharp, fast, and human.
+                            Software developer building AI-powered, cloud-ready products that feel sharp, fast, and human.
                         </p>
 
                         <div className="pointer-events-auto mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
