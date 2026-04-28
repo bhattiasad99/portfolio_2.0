@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
+      {
+        protocol: "https",
+        hostname: "assets.codepen.io",
+        pathname: "/16327/**",
+      },
     ],
   },
 };

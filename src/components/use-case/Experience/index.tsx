@@ -11,6 +11,7 @@ import { motion, type Variants } from "motion/react";
 import { JOB_EXPERIENCES } from "@/config/data";
 import { cn } from "@/lib/utils";
 import ExperienceBackground from "@/components/custom/templates/ExperienceBackground";
+import ImageTrail from "@/components/custom/cursor/image-trail";
 
 type ExperienceProps = {
   showContent: boolean;
@@ -45,31 +46,32 @@ const fadeInViewport = {
 const Experience = ({ showContent }: ExperienceProps) => {
   return (
     <ExperienceBackground>
-      <section
-        id="experience"
-        className={cn(
-          "relative px-6 py-20 opacity-0 [transform:translateY(72px)] [transition:opacity_780ms_ease,_transform_780ms_cubic-bezier(0.22,1,0.36,1)] sm:px-8 lg:px-12 lg:py-28",
-          showContent && "opacity-100 [transform:translateY(0)]"
-        )}
-      >
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-12">
-          <div className="flex flex-col gap-8">
-            <motion.div
-              className="max-w-5xl"
-              variants={fadeInUpVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={fadeInViewport}
-              transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <p className="inline-flex items-center gap-2 border border-[var(--portfolio-line)] bg-white/75 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--portfolio-muted)] shadow-[0_14px_44px_rgba(15,23,42,0.08)] backdrop-blur-md">
-                <RiBriefcase4Line size={16} />
-                Experience
-              </p>
-              <h2 className="mt-5 text-balance text-[clamp(2.6rem,6vw,5rem)] font-semibold leading-[0.92] tracking-[-0.06em] text-[var(--portfolio-text)]">
-                Building products across frontend, AI systems, and delivery leadership.
-              </h2>
-            </motion.div>
+      <ImageTrail>
+        <section
+          id="experience"
+          className={cn(
+            "relative px-6 py-20 opacity-0 [transform:translateY(72px)] [transition:opacity_780ms_ease,_transform_780ms_cubic-bezier(0.22,1,0.36,1)] sm:px-8 lg:px-12 lg:py-28",
+            showContent && "opacity-100 [transform:translateY(0)]"
+          )}
+        >
+          <div className="mx-auto flex w-full max-w-6xl flex-col gap-12">
+            <div className="flex flex-col gap-8">
+              <motion.div
+                className="max-w-5xl"
+                variants={fadeInUpVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={fadeInViewport}
+                transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <p className="inline-flex items-center gap-2 border border-[var(--portfolio-line)] bg-white/75 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--portfolio-muted)] shadow-[0_14px_44px_rgba(15,23,42,0.08)] backdrop-blur-md">
+                  <RiBriefcase4Line size={16} />
+                  Experience
+                </p>
+                <h2 className="mt-5 text-balance text-[clamp(2.6rem,6vw,5rem)] font-semibold leading-[0.92] tracking-[-0.06em] text-[var(--portfolio-text)]">
+                  Building products across frontend, AI systems, and delivery leadership.
+                </h2>
+              </motion.div>
 
             <motion.div
               className="grid gap-4 text-sm text-[var(--portfolio-muted)] md:grid-cols-3"
@@ -184,8 +186,9 @@ const Experience = ({ showContent }: ExperienceProps) => {
               ))}
             </div>
           </div>
-        </div>
-      </section>
+          </div>
+        </section>
+      </ImageTrail>
     </ExperienceBackground>
   );
 };
