@@ -9,6 +9,7 @@ interface Position {
 }
 
 export interface SmoothCursorProps {
+  enabled?: boolean
   cursor?: React.ReactNode
   springConfig?: {
     damping: number
@@ -87,6 +88,7 @@ const DefaultCursorSVG: FC = () => {
 }
 
 export function SmoothCursor({
+  enabled = true,
   cursor = <DefaultCursorSVG />,
   springConfig = {
     damping: 45,
@@ -100,8 +102,9 @@ export function SmoothCursor({
   const lastUpdateTime = useRef(0)
   const previousAngle = useRef(0)
   const accumulatedRotation = useRef(0)
-  const [isEnabled, setIsEnabled] = useState(false)
+  const [supportsDesktopPointer, setSupportsDesktopPointer] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
+  const isEnabled = enabled && supportsDesktopPointer
 
   const cursorX = useSpring(0, springConfig)
   const cursorY = useSpring(0, springConfig)
@@ -117,15 +120,15 @@ export function SmoothCursor({
   })
 
   useEffect(() => {
+    if (!enabled) {
+      document.body.style.cursor = ""
+      return
+    }
+
     const mediaQuery = window.matchMedia(DESKTOP_POINTER_QUERY)
 
     const updateEnabled = () => {
-      const nextIsEnabled = mediaQuery.matches
-      setIsEnabled(nextIsEnabled)
-
-      if (!nextIsEnabled) {
-        setIsVisible(false)
-      }
+      setSupportsDesktopPointer(mediaQuery.matches)
     }
 
     updateEnabled()
@@ -133,11 +136,12 @@ export function SmoothCursor({
 
     return () => {
       mediaQuery.removeEventListener("change", updateEnabled)
+      document.body.style.cursor = ""
     }
-  }, [])
+  }, [enabled])
 
   useEffect(() => {
-    if (!isEnabled) {
+    if (!enabled || !isEnabled) {
       return
     }
 
@@ -222,15 +226,15 @@ export function SmoothCursor({
 
     return () => {
       window.removeEventListener("pointermove", throttledPointerMove)
-      document.body.style.cursor = "auto"
+      document.body.style.cursor = ""
       if (rafId) cancelAnimationFrame(rafId)
       if (timeout !== null) {
         clearTimeout(timeout)
       }
     }
-  }, [cursorX, cursorY, rotation, scale, isEnabled])
+  }, [cursorX, cursorY, enabled, rotation, scale, isEnabled])
 
-  if (!isEnabled) {
+  if (!enabled || !isEnabled) {
     return null
   }
 

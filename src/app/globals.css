@@ -139,13 +139,24 @@
   }
 
   @media (any-hover: hover) and (any-pointer: fine) {
-    * {
+    .smooth-cursor-enabled * {
       cursor: none !important;
     }
 
-    input,
-    textarea,
-    select {
+    .smooth-cursor-enabled input,
+    .smooth-cursor-enabled textarea,
+    .smooth-cursor-enabled select {
+      cursor: text !important;
+    }
+
+    .smooth-cursor-disabled,
+    .smooth-cursor-disabled * {
+      cursor: auto !important;
+    }
+
+    .smooth-cursor-disabled input,
+    .smooth-cursor-disabled textarea,
+    .smooth-cursor-disabled select {
       cursor: text !important;
     }
   }

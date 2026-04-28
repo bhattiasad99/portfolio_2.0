@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { SmoothCursor } from "@/components/ui/smooth-cursor";
+import { ENABLE_SMOOTH_CURSOR } from "@/config/ui";
 
 const jetbrainsMonoHeading = JetBrains_Mono({
   subsets: ["latin"],
@@ -34,8 +35,15 @@ export default function RootLayout({
       lang="en"
       className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, jetbrainsMonoHeading.variable)}
     >
-      <body className="min-h-full flex flex-col">
-        <SmoothCursor />
+      <body
+        className={cn(
+          "min-h-full flex flex-col",
+          ENABLE_SMOOTH_CURSOR
+            ? "smooth-cursor-enabled"
+            : "smooth-cursor-disabled"
+        )}
+      >
+        <SmoothCursor enabled={ENABLE_SMOOTH_CURSOR} />
         {children}
       </body>
     </html>
