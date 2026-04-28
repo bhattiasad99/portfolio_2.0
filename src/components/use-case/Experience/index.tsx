@@ -1,9 +1,12 @@
+"use client";
+
 import {
   RiArrowRightUpLine,
   RiBriefcase4Line,
   RiBuilding2Line,
   RiSparkling2Line,
 } from "@remixicon/react";
+import { motion, type Variants } from "motion/react";
 
 import { JOB_EXPERIENCES } from "@/config/data";
 import { cn } from "@/lib/utils";
@@ -11,6 +14,32 @@ import ExperienceBackground from "@/components/custom/templates/ExperienceBackgr
 
 type ExperienceProps = {
   showContent: boolean;
+};
+
+const fadeInUpVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 28,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+  },
+};
+
+const cardsContainerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.08,
+    },
+  },
+};
+
+const fadeInViewport = {
+  once: true,
+  amount: 0.8,
 };
 
 const Experience = ({ showContent }: ExperienceProps) => {
@@ -25,7 +54,14 @@ const Experience = ({ showContent }: ExperienceProps) => {
       >
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-12">
           <div className="flex flex-col gap-8">
-            <div className="max-w-5xl">
+            <motion.div
+              className="max-w-5xl"
+              variants={fadeInUpVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={fadeInViewport}
+              transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
+            >
               <p className="inline-flex items-center gap-2 border border-[var(--portfolio-line)] bg-white/75 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--portfolio-muted)] shadow-[0_14px_44px_rgba(15,23,42,0.08)] backdrop-blur-md">
                 <RiBriefcase4Line size={16} />
                 Experience
@@ -33,28 +69,46 @@ const Experience = ({ showContent }: ExperienceProps) => {
               <h2 className="mt-5 text-balance text-[clamp(2.6rem,6vw,5rem)] font-semibold leading-[0.92] tracking-[-0.06em] text-[var(--portfolio-text)]">
                 Building products across frontend, AI systems, and delivery leadership.
               </h2>
-            </div>
+            </motion.div>
 
-            <div className="grid gap-4 text-sm text-[var(--portfolio-muted)] md:grid-cols-3">
-              <div className="border border-[var(--portfolio-line)] bg-white/72 p-4 shadow-[0_18px_54px_rgba(15,23,42,0.08)] backdrop-blur-md">
+            <motion.div
+              className="grid gap-4 text-sm text-[var(--portfolio-muted)] md:grid-cols-3"
+              variants={cardsContainerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={fadeInViewport}
+            >
+              <motion.div
+                className="border border-[var(--portfolio-line)] bg-white/72 p-4 shadow-[0_18px_54px_rgba(15,23,42,0.08)] backdrop-blur-md"
+                variants={fadeInUpVariants}
+                transition={{ duration: 0.66, ease: [0.22, 1, 0.36, 1] }}
+              >
                 <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em]">Years</p>
                 <p className="mt-3 text-3xl font-semibold tracking-[-0.05em] text-[var(--portfolio-text)]">4+</p>
                 <p className="mt-2 leading-6">Professional product engineering across web, platform, and operational systems.</p>
-              </div>
-              <div className="border border-[var(--portfolio-line)] bg-white/72 p-4 shadow-[0_18px_54px_rgba(15,23,42,0.08)] backdrop-blur-md">
+              </motion.div>
+              <motion.div
+                className="border border-[var(--portfolio-line)] bg-white/72 p-4 shadow-[0_18px_54px_rgba(15,23,42,0.08)] backdrop-blur-md"
+                variants={fadeInUpVariants}
+                transition={{ duration: 0.66, ease: [0.22, 1, 0.36, 1] }}
+              >
                 <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em]">Focus</p>
                 <p className="mt-3 text-xl font-semibold tracking-[-0.04em] text-[var(--portfolio-text)]">AI, SaaS, ERP</p>
                 <p className="mt-2 leading-6">From procurement matching and search to healthcare operations and edtech platforms.</p>
-              </div>
-              <div className="border border-[var(--portfolio-line)] bg-[var(--portfolio-text)] p-4 text-white shadow-[0_20px_60px_rgba(15,23,42,0.18)]">
+              </motion.div>
+              <motion.div
+                className="border border-[var(--portfolio-line)] bg-[var(--portfolio-text)] p-4 text-white shadow-[0_20px_60px_rgba(15,23,42,0.18)]"
+                variants={fadeInUpVariants}
+                transition={{ duration: 0.66, ease: [0.22, 1, 0.36, 1] }}
+              >
                 <p className="inline-flex items-center gap-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/60">
                   <RiSparkling2Line size={14} />
                   Impact
                 </p>
                 <p className="mt-3 text-3xl font-semibold tracking-[-0.05em]">50K+</p>
                 <p className="mt-2 leading-6 text-white/70">Daily search items processed, with measurable performance and release improvements.</p>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
 
           <div className="relative">
