@@ -24,8 +24,8 @@ const Experience = ({ showContent }: ExperienceProps) => {
         )}
       >
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-12">
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-end">
-            <div className="max-w-xl">
+          <div className="flex flex-col gap-8">
+            <div className="max-w-5xl">
               <p className="inline-flex items-center gap-2 border border-[var(--portfolio-line)] bg-white/75 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--portfolio-muted)] shadow-[0_14px_44px_rgba(15,23,42,0.08)] backdrop-blur-md">
                 <RiBriefcase4Line size={16} />
                 Experience
@@ -35,7 +35,7 @@ const Experience = ({ showContent }: ExperienceProps) => {
               </h2>
             </div>
 
-            <div className="grid gap-4 text-sm text-[var(--portfolio-muted)] sm:grid-cols-3">
+            <div className="grid gap-4 text-sm text-[var(--portfolio-muted)] md:grid-cols-3">
               <div className="border border-[var(--portfolio-line)] bg-white/72 p-4 shadow-[0_18px_54px_rgba(15,23,42,0.08)] backdrop-blur-md">
                 <p className="text-[0.68rem] font-semibold uppercase tracking-[0.22em]">Years</p>
                 <p className="mt-3 text-3xl font-semibold tracking-[-0.05em] text-[var(--portfolio-text)]">4+</p>
