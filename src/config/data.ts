@@ -21,6 +21,48 @@ export type JobExperience = {
 
 export const JOB_EXPERIENCES: JobExperience[] = [
   {
+    company: "Digital Enterprises",
+    slug: "digital-enterprises",
+    location: "Doha, Qatar · On-site",
+    positions: [
+      {
+        title: "Senior Full Stack AI Engineer",
+        start: "2026-03",
+        end: "Present",
+        periodLabel: "Mar 2026 - Present · 2 mos",
+        employmentType: "Contract",
+        description:
+          "Building an AI-driven B2B marketplace for the oil and gas industry, focused on intelligent procurement and supplier matching.",
+        achievements: [
+          {
+            text: "Building an AI-driven B2B marketplace for the oil and gas industry, focused on intelligent procurement and supplier matching.",
+          },
+          {
+            text: "Designing and implementing event-driven microservices architecture with async communications and decoupled systems using NestJS, FastAPI, Azure Container Apps, APIM, Entra ID, and other Azure services.",
+          },
+          {
+            text: "Integrating SAP Event Mesh and webhook-based pipelines for real-time data ingestion, system notifications, Azure Service Bus background jobs, and Event Grid workflows.",
+          },
+          {
+            text: "Developing high-performance search systems combining vector search, embeddings, semantic search, LLM-based analysis, and fuzzy matching across million-plus records.",
+          },
+          {
+            text: "Architecting scalable backend systems with Azure Entra ID authentication, Static Web Apps, and cloud-native infrastructure.",
+          },
+          {
+            text: "Implementing CI/CD pipelines with automated deployments, PR-based code reviews, agentic codebots, and environment-based workflows.",
+          },
+          {
+            text: "Building end-to-end full-stack features across frontend and backend, ensuring performance, scalability, and maintainability.",
+          },
+          {
+            text: "Optimizing system performance for low-latency search and high-throughput event processing.",
+          },
+        ],
+      },
+    ],
+  },
+  {
     company: "ZIEL GLOBAL LTD",
     slug: "ziel-global-ltd",
     positions: [
