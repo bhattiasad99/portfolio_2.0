@@ -16,6 +16,7 @@ export type JobExperience = {
   company: string;
   slug: string;
   location?: string;
+  logo?: string;
   positions: JobPosition[];
 };
 
@@ -24,6 +25,7 @@ export const JOB_EXPERIENCES: JobExperience[] = [
     company: "Digital Enterprises",
     slug: "digital-enterprises",
     location: "Doha, Qatar · On-site",
+    logo: "/company_logos/digital_enterprises.jpeg",
     positions: [
       {
         title: "Senior Full Stack AI Engineer",
@@ -65,6 +67,7 @@ export const JOB_EXPERIENCES: JobExperience[] = [
   {
     company: "ZIEL GLOBAL LTD",
     slug: "ziel-global-ltd",
+    logo: "/company_logos/ziel.jpeg",
     positions: [
       {
         title: "Senior Software Developer",
@@ -143,6 +146,7 @@ export const JOB_EXPERIENCES: JobExperience[] = [
   {
     company: "NISA NURSING HOME",
     slug: "nisa-nursing-home",
+    logo: "/company_logos/Nisa Nursing Home.jpeg",
     positions: [
       {
         title: "Technical Consultant",
