@@ -204,7 +204,7 @@ const TimelineCard = ({
             <motion.div
               className="mt-0.5 shrink-0 border border-[var(--portfolio-line)] p-1.5 text-[var(--portfolio-muted)] transition-colors"
               animate={{
-                backgroundColor: isHovered ? "var(--portfolio-text)" : "transparent",
+                backgroundColor: isHovered ? "var(--portfolio-text)" : "rgba(0, 0, 0, 0)",
                 borderColor: isHovered ? "var(--portfolio-text)" : "var(--portfolio-line)",
                 color: isHovered ? "#fff" : "var(--portfolio-muted)",
               }}
