@@ -2,7 +2,8 @@
 
 /* Blob URLs let the loader and the rendered scene share the downloaded media. */
 /* eslint-disable @next/next/no-img-element */
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type PointerEvent } from "react";
+import { RiFileTextLine } from "@remixicon/react";
 import gsap from "gsap";
 import HeroBackground from "@/components/custom/templates/HeroBackground";
 import WorkBackground from "@/components/custom/templates/WorkBackground";
@@ -19,10 +20,9 @@ const PROJECTS = [
   {
     title: "Project one",
     category: "Product design & engineering",
-    style: "indigo",
   },
-  { title: "Project two", category: "AI & automation", style: "sage" },
-  { title: "Project three", category: "Cloud & integrations", style: "sand" },
+  { title: "Project two", category: "AI & automation" },
+  { title: "Project three", category: "Cloud & integrations" },
 ];
 
 function segment(value: number, start: number, end: number) {
@@ -168,6 +168,7 @@ export default function Hero({ showContent, media }: HeroProps) {
         copy.inert = false;
         nav.inert = false;
         work.inert = false;
+        gsap.set(Array.from(track.children), { rotationX: 0, rotationY: 0 });
         video.pause();
         if (video.readyState >= 1) video.currentTime = 0;
       }
@@ -188,6 +189,7 @@ export default function Hero({ showContent, media }: HeroProps) {
 
     return () => {
       gsap.ticker.remove(tick);
+      gsap.killTweensOf(Array.from(track.children));
       observer.disconnect();
       window.removeEventListener("scroll", updateScroll);
       window.removeEventListener("resize", measure);
@@ -203,6 +205,47 @@ export default function Hero({ showContent, media }: HeroProps) {
       document.body.style.overflow = overflow;
     };
   }, [showContent]);
+
+  const tiltProject = (event: PointerEvent<HTMLElement>) => {
+    if (
+      event.pointerType !== "mouse" ||
+      !window.matchMedia(
+        "(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)",
+      ).matches
+    )
+      return;
+
+    const card = event.currentTarget;
+    const bounds = card.getBoundingClientRect();
+    const horizontal = gsap.utils.clamp(
+      -1,
+      1,
+      ((event.clientX - bounds.left) / bounds.width) * 2 - 1,
+    );
+    const vertical = gsap.utils.clamp(
+      -1,
+      1,
+      ((event.clientY - bounds.top) / bounds.height) * 2 - 1,
+    );
+    gsap.to(card, {
+      rotationX: -vertical * 3,
+      rotationY: horizontal * 3,
+      transformPerspective: 1100,
+      duration: 0.3,
+      ease: "power2.out",
+      overwrite: "auto",
+    });
+  };
+
+  const resetProjectTilt = (event: PointerEvent<HTMLElement>) => {
+    gsap.to(event.currentTarget, {
+      rotationX: 0,
+      rotationY: 0,
+      duration: 0.45,
+      ease: "power2.out",
+      overwrite: "auto",
+    });
+  };
 
   const exploreWork = () => {
     const section = sectionRef.current!;
@@ -295,30 +338,28 @@ export default function Hero({ showContent, media }: HeroProps) {
                 </div>
                 <div ref={trackRef} className={styles.projectTrack}>
                   {PROJECTS.map((project) => (
-                    <article key={project.title} className={styles.project}>
-                      <div
-                        className={`${styles.projectPreview} ${styles[project.style]}`}
-                        aria-hidden="true"
-                      >
-                        <div className={styles.previewWindow}>
-                          <div className={styles.previewSidebar} />
-                          <div className={styles.previewContent}>
-                            <span />
-                            <span />
-                            <span />
-                            <div />
-                            <div />
-                          </div>
-                        </div>
-                      </div>
+                    <article
+                      key={project.title}
+                      className={styles.project}
+                      tabIndex={0}
+                      onPointerMove={tiltProject}
+                      onPointerLeave={resetProjectTilt}
+                      onPointerCancel={resetProjectTilt}
+                    >
                       <div className={styles.projectDetails}>
-                        <p>{project.category}</p>
+                        <span className={styles.projectCategory}>
+                          {project.category}
+                        </span>
                         <h3>{project.title}</h3>
                         <p>
                           Lorem ipsum dolor sit amet, consectetur adipiscing
                           elit.
                         </p>
                       </div>
+                      <footer className={styles.projectFooter}>
+                        <RiFileTextLine size={15} aria-hidden="true" />
+                        <span>Case study coming soon</span>
+                      </footer>
                     </article>
                   ))}
                 </div>

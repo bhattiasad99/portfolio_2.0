@@ -155,100 +155,89 @@
   width: max-content;
   display: flex;
   gap: 28px;
-  padding-right: 5vw;
+  padding: 12px 5vw 12px 0;
   will-change: transform;
 }
 .project {
-  width: clamp(290px, 39vw, 560px);
-  border: 1px solid #ffffff36;
-  background: #17221fed;
-  border-radius: 12px;
-  overflow: hidden;
-}
-.projectPreview {
-  height: clamp(100px, 18svh, 220px);
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-}
-.indigo {
-  background: #a8b5d6;
-  --preview-color: #283967;
-}
-.sage {
-  background: #acb9a0;
-  --preview-color: #3e5540;
-}
-.sand {
-  background: #d3c1aa;
-  --preview-color: #70583e;
-}
-.previewWindow {
-  width: 70%;
-  height: 74%;
-  background: #f9faf4;
   display: flex;
-  box-shadow: 0 16px 34px #15211830;
-  border-radius: 7px 7px 0 0;
-  padding: 9px;
-  gap: 9px;
-  transform: translateY(19%);
+  flex-direction: column;
+  justify-content: space-between;
+  flex-shrink: 0;
+  width: clamp(280px, 32vw, 440px);
+  height: clamp(230px, 43svh, 420px);
+  padding: 26px;
+  color: #f5f6f2;
+  border: 1px solid rgb(255 255 255 / 16%);
+  border-radius: 14px;
+  background: rgb(19 28 26 / 65%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 7%),
+    0 12px 32px rgb(0 0 0 / 12%);
+  transform: perspective(1100px) rotateX(0) rotateY(0);
+  transition:
+    background-color 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
 }
-.previewSidebar {
-  width: 22%;
-  background: var(--preview-color);
-  border-radius: 3px;
-  opacity: 0.8;
+@supports (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
+  .project {
+    background: rgb(255 255 255 / 6%);
+    -webkit-backdrop-filter: blur(16px) saturate(115%);
+    backdrop-filter: blur(16px) saturate(115%);
+  }
 }
-.previewContent {
-  flex: 1;
-  padding: 8px 5px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  align-content: start;
+@media (hover: hover) and (pointer: fine) {
+  .project:hover {
+    background: rgb(255 255 255 / 13%);
+    border-color: rgb(255 255 255 / 30%);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 12%),
+      0 18px 38px rgb(0 0 0 / 18%);
+  }
 }
-.previewContent span {
-  width: 100%;
-  height: 4px;
-  background: #bcc3b7;
-  border-radius: 2px;
+.project:focus-visible {
+  background: rgb(255 255 255 / 13%);
+  border-color: rgb(255 255 255 / 35%);
+  outline: 2px solid #dce7d2;
+  outline-offset: 4px;
 }
-.previewContent span:nth-child(2) {
-  width: 65%;
-}
-.previewContent span:nth-child(3) {
-  width: 80%;
-}
-.previewContent div {
-  height: 44px;
-  width: 43%;
-  margin-top: 7px;
-  background: var(--preview-color);
-  opacity: 0.16;
-  border-radius: 3px;
-}
-.projectDetails {
-  padding: 20px 24px 23px;
-}
-.projectDetails > p:first-child {
+.projectCategory {
+  display: inline-block;
+  max-width: 100%;
+  padding: 4px 8px;
+  border: 1px solid rgb(255 255 255 / 9%);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 7%);
+  color: #d1dece;
   font-size: 10px;
-  letter-spacing: 0.05em;
-  color: #bdc9b7;
-  margin: 0 0 9px;
+  line-height: 1.4;
 }
 .projectDetails h3 {
-  font-size: 25px;
-  font-weight: 400;
+  margin: 17px 0 12px;
+  color: #f8faf6;
+  font-size: clamp(23px, 2vw, 29px);
+  line-height: 1.15;
+  font-weight: 450;
   letter-spacing: -0.04em;
-  margin: 0 0 8px;
 }
-.projectDetails > p:last-child {
+.projectDetails > p {
   margin: 0;
-  font-size: 12px;
-  line-height: 1.6;
-  color: #bfc7c0;
-  max-width: 310px;
+  color: rgb(241 246 237 / 76%);
+  font-size: 13px;
+  line-height: 1.65;
+  max-width: 32ch;
+}
+.projectFooter {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 9px;
+  margin-top: 24px;
+  color: rgb(234 242 229 / 60%);
+  font-size: 11px;
+  line-height: 1.45;
 }
 .scrollHint {
   position: absolute;
@@ -309,11 +298,8 @@
     width: 78vw;
     max-width: 390px;
   }
-  .projectPreview {
-    height: 20svh;
-  }
-  .projectDetails {
-    padding: 17px 19px 20px;
+  .project {
+    padding: 22px;
   }
   .scrollHint {
     left: 24px;
@@ -378,6 +364,10 @@
   .surface video {
     display: none;
   }
+  .project {
+    transform: none !important;
+    transition: none;
+  }
 }
 @media (prefers-reduced-motion: reduce) and (max-width: 759px) {
   .introduction {
@@ -389,5 +379,21 @@
   }
   .projectTrack {
     width: calc(100% - 24px);
+  }
+}
+
+@media (max-height: 600px) {
+  .project {
+    height: 50svh;
+    min-height: 200px;
+    padding: 18px;
+  }
+  .projectDetails h3 {
+    margin: 12px 0 8px;
+    font-size: 22px;
+  }
+  .projectFooter {
+    margin-top: 14px;
+    gap: 6px;
   }
 }
