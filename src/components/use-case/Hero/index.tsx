@@ -111,28 +111,21 @@ export default function Hero({ showContent, media }: HeroProps) {
       const y = pupilY - portraitHeight * PORTRAIT.pupilY * scale - portraitTop;
       portrait.style.transform = `translate3d(${x}px,${y}px,0) scale(${scale})`;
       portrait.style.visibility = p >= 0.58 ? "hidden" : "visible";
+      // Enter darkness while the original camera is still moving into the eye.
+      const pupilDarkness = smooth(segment(p, 0.39, 0.47));
+      portrait.style.filter = `brightness(${1 - pupilDarkness})`;
       const copyOpacity = 1 - segment(p, 0.015, 0.12);
       copy.style.opacity = String(copyOpacity);
       nav.style.opacity = String(copyOpacity);
       copy.inert = copyOpacity < 0.1;
       nav.inert = copyOpacity < 0.1;
 
-      // The aperture fades in at 1 CSS px diameter before any growth begins.
-      const apertureOpacity = smooth(segment(p, 0.2, 0.245));
-      const radius =
-        0.5 *
-        Math.exp(
-          Math.log(Math.hypot(width, height) * 1.02) *
-            smooth(segment(p, 0.265, 0.58)),
-        );
-      reveal.style.opacity = String(apertureOpacity);
-      reveal.style.clipPath =
-        p >= 0.58 ? "none" : `circle(${radius}px at ${pupilX}px ${pupilY}px)`;
-      const mediaScale = Math.min(1, radius / (height / 2));
-      surface.style.transform =
-        p >= 0.58
-          ? "none"
-          : `translate3d(${pupilX - width / 2}px,${pupilY - height / 2}px,0) scale(${mediaScale})`;
+      // The video stays at frame zero and invisible until the pupil is black.
+      // Reveal the whole scene from that darkness instead of growing a disc.
+      const videoReveal = smooth(segment(p, 0.47, 0.58));
+      reveal.style.opacity = String(videoReveal);
+      reveal.style.clipPath = "none";
+      surface.style.transform = `scale(${1 + videoReveal * 0.1})`;
 
       const workOpacity = smooth(segment(p, 0.59, 0.65));
       work.style.opacity = String(workOpacity);
