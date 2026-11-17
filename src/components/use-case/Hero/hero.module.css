@@ -37,6 +37,12 @@
 }
 .portrait {
   position: absolute;
+  /* Match the initial camera layout before its JavaScript effect runs. */
+  right: 4vw;
+  bottom: 0;
+  width: auto;
+  height: 99svh;
+  aspect-ratio: 3584 / 4800;
   max-width: none;
   transform-origin: 0 0;
   will-change: transform;
@@ -254,6 +260,10 @@
   color: #e0e4d5;
 }
 @media (max-width: 759px) {
+  .portrait {
+    right: 0;
+    height: min(74svh, 122vw);
+  }
   .sequence {
     height: 580svh;
   }
