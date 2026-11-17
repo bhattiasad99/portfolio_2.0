@@ -14,5 +14,4 @@ export const PORTRAIT = {
   height: 4800,
   pupilX: 1576 / 3584,
   pupilY: 1325 / 4800,
-  pupilRadius: 20,
 };
