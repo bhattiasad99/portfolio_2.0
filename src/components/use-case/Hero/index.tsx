@@ -2,13 +2,14 @@
 
 /* Blob URLs let the loader and the rendered scene share the downloaded media. */
 /* eslint-disable @next/next/no-img-element */
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import HeroBackground from "@/components/custom/templates/HeroBackground";
 import WorkBackground from "@/components/custom/templates/WorkBackground";
 import { PORTRAIT } from "@/config/portfolio-media";
 import type { PortfolioMedia } from "@/hooks/use-portfolio-media";
 import styles from "./hero.module.css";
+import { calculatePupilZoom } from "./pupil-zoom";
 
 type HeroProps = {
   showContent: boolean;
@@ -39,19 +40,21 @@ export default function Hero({ showContent, media }: HeroProps) {
   const portraitRef = useRef<HTMLImageElement>(null);
   const copyRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
+  const pupilShadowRef = useRef<HTMLDivElement>(null);
   const revealRef = useRef<HTMLDivElement>(null);
   const surfaceRef = useRef<HTMLDivElement>(null);
   const workRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  useEffect(() => {
-    if (!showContent) return;
+  useLayoutEffect(() => {
+    // Position the first frame while the loader still covers the viewport.
     const section = sectionRef.current!;
     const viewport = viewportRef.current!;
     const portrait = portraitRef.current!;
     const copy = copyRef.current!;
     const nav = navRef.current!;
+    const pupilShadow = pupilShadowRef.current!;
     const reveal = revealRef.current!;
     const surface = surfaceRef.current!;
     const work = workRef.current!;
@@ -72,7 +75,9 @@ export default function Hero({ showContent, media }: HeroProps) {
     let travel = 0;
 
     const updateScroll = () => {
-      target = segment(window.scrollY, startY, startY + scrollDistance);
+      target = showContent
+        ? segment(window.scrollY, startY, startY + scrollDistance)
+        : 0;
     };
 
     const measure = () => {
@@ -100,41 +105,46 @@ export default function Hero({ showContent, media }: HeroProps) {
 
     const render = () => {
       const p = progress;
-      const zoomProgress = smooth(segment(p, 0.025, 0.57));
-      const scale = Math.exp(Math.log(85) * zoomProgress);
       const pupilStartX = portraitLeft + portraitWidth * PORTRAIT.pupilX;
       const pupilStartY = portraitTop + portraitHeight * PORTRAIT.pupilY;
-      const center = smooth(segment(p, 0.02, 0.34));
-      const pupilX = gsap.utils.interpolate(pupilStartX, width / 2, center);
-      const pupilY = gsap.utils.interpolate(pupilStartY, height / 2, center);
-      const x = pupilX - portraitWidth * PORTRAIT.pupilX * scale - portraitLeft;
-      const y = pupilY - portraitHeight * PORTRAIT.pupilY * scale - portraitTop;
-      portrait.style.transform = `translate3d(${x}px,${y}px,0) scale(${scale})`;
-      portrait.style.visibility = p >= 0.58 ? "hidden" : "visible";
+      const zoom = calculatePupilZoom({
+        progress: p,
+        width,
+        height,
+        portraitWidth,
+        pupilStartX,
+        pupilStartY,
+        sourcePupilRadius: PORTRAIT.pupilRadius,
+        sourcePortraitWidth: PORTRAIT.width,
+      });
+      const x =
+        zoom.pupilX -
+        portraitWidth * PORTRAIT.pupilX * zoom.scale -
+        portraitLeft;
+      const y =
+        zoom.pupilY -
+        portraitHeight * PORTRAIT.pupilY * zoom.scale -
+        portraitTop;
+      portrait.style.transform = `translate3d(${x}px,${y}px,0) scale(${zoom.scale})`;
+      portrait.style.visibility = zoom.portraitVisible ? "visible" : "hidden";
+      // The black center belongs to the portrait's pupil and shares its camera scale.
+      pupilShadow.style.left = `${zoom.pupilX}px`;
+      pupilShadow.style.top = `${zoom.pupilY}px`;
+      pupilShadow.style.width = `${zoom.radius * 2}px`;
+      pupilShadow.style.height = `${zoom.radius * 2}px`;
+      pupilShadow.style.opacity = String(zoom.blackOpacity);
       const copyOpacity = 1 - segment(p, 0.015, 0.12);
       copy.style.opacity = String(copyOpacity);
       nav.style.opacity = String(copyOpacity);
       copy.inert = copyOpacity < 0.1;
       nav.inert = copyOpacity < 0.1;
 
-      // The aperture fades in at 1 CSS px diameter before any growth begins.
-      const apertureOpacity = smooth(segment(p, 0.2, 0.245));
-      const radius =
-        0.5 *
-        Math.exp(
-          Math.log(Math.hypot(width, height) * 1.02) *
-            smooth(segment(p, 0.265, 0.58)),
-        );
-      reveal.style.opacity = String(apertureOpacity);
-      reveal.style.clipPath =
-        p >= 0.58 ? "none" : `circle(${radius}px at ${pupilX}px ${pupilY}px)`;
-      const mediaScale = Math.min(1, radius / (height / 2));
-      surface.style.transform =
-        p >= 0.58
-          ? "none"
-          : `translate3d(${pupilX - width / 2}px,${pupilY - height / 2}px,0) scale(${mediaScale})`;
+      // Reveal the scene only after the camera has entered the opaque pupil.
+      // Both views follow one camera curve, so no video disc grows over the iris.
+      reveal.style.opacity = String(zoom.mediaOpacity);
+      surface.style.transform = `scale(${zoom.mediaScale})`;
 
-      const workOpacity = smooth(segment(p, 0.59, 0.65));
+      const workOpacity = smooth(segment(p, 0.62, 0.68));
       work.style.opacity = String(workOpacity);
       work.inert = workOpacity < 0.98;
       work.style.visibility = workOpacity === 0 ? "hidden" : "visible";
@@ -144,7 +154,7 @@ export default function Hero({ showContent, media }: HeroProps) {
     };
 
     const tick = (_time: number, deltaTime: number) => {
-      if (motionQuery.matches) return;
+      if (!showContent || motionQuery.matches) return;
       progress +=
         (target - progress) * (1 - Math.exp(-Math.min(deltaTime, 64) / 95));
       if (Math.abs(target - progress) < 0.00001) progress = target;
@@ -153,7 +163,7 @@ export default function Hero({ showContent, media }: HeroProps) {
         previousProgress = progress;
       }
       const seekTime =
-        segment(progress, 0.66, 0.98) *
+        segment(progress, 0.69, 0.98) *
         Math.max(0, (video.duration || 0) - 0.045);
       if (
         video.readyState >= 2 &&
@@ -169,9 +179,16 @@ export default function Hero({ showContent, media }: HeroProps) {
       if (!motionQuery.matches) render();
       else {
         // Restore CSS layout when the visitor switches motion preferences live.
-        [portrait, copy, nav, reveal, surface, work, track].forEach((element) =>
-          element.removeAttribute("style"),
-        );
+        [
+          portrait,
+          pupilShadow,
+          copy,
+          nav,
+          reveal,
+          surface,
+          work,
+          track,
+        ].forEach((element) => element.removeAttribute("style"));
         copy.inert = false;
         nav.inert = false;
         work.inert = false;
@@ -223,7 +240,7 @@ export default function Hero({ showContent, media }: HeroProps) {
       return;
     }
     window.scrollTo({
-      top: top + (section.offsetHeight - height) * 0.65,
+      top: top + (section.offsetHeight - height) * 0.68,
       behavior: "smooth",
     });
   };
@@ -236,6 +253,11 @@ export default function Hero({ showContent, media }: HeroProps) {
         aria-label="Introduction and selected work"
       >
         <div ref={viewportRef} className={styles.viewport}>
+          <div
+            ref={pupilShadowRef}
+            className={styles.pupilShadow}
+            aria-hidden="true"
+          />
           <header ref={navRef} className={styles.navigation}>
             <span className={styles.monogram}>AZB.</span>
             <a href="#experience">Experience ↗</a>
