@@ -23,14 +23,19 @@ const HexagonBackgroundComponent: FC<HexagonBackgroundProps> = ({ children }) =>
     )
 }
 
+const WhiteBackgroundComponent: FC<IProps> = ({ children }) => (
+    <div className="relative bg-white text-[#151b19]">{children}</div>
+);
+
 const BACKGROUNDS = {
+    white: { component: WhiteBackgroundComponent },
     hexagon: {
         component: HexagonBackgroundComponent
     }
 }
 
 const HeroBackground = ({ children }: IProps) => {
-    const currentComponent = BACKGROUNDS.hexagon;
+    const currentComponent = BACKGROUNDS.white;
     const Component = currentComponent.component;
     return (
         <Component>

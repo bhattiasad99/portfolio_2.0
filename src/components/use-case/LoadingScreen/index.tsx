@@ -1,7 +1,7 @@
 "use client";
 
 import Lottie from "lottie-react";
-import { Component, type ReactNode, useEffect, useState } from "react";
+import { Component, type ReactNode, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import loadingAnimation from "./loading-animation.json";
 import styles from "./loading-screen.module.css";
@@ -26,6 +26,9 @@ const OUTPUT_END_MS = 3200;
 
 type LoadingScreenProps = {
   onRevealContent?: () => void;
+  assetProgress?: number;
+  ready?: boolean;
+  degraded?: boolean;
 };
 
 type LoaderLottieBoundaryProps = {
@@ -64,12 +67,20 @@ class LoaderLottieBoundary extends Component<
 
 export default function LoadingScreen({
   onRevealContent,
+  assetProgress,
+  ready = true,
+  degraded = false,
 }: LoadingScreenProps) {
   const [progress, setProgress] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [elapsedMs, setElapsedMs] = useState(0);
   const [hasLottieError, setHasLottieError] = useState(false);
+
+  const readiness = useRef({ ready, managed: assetProgress !== undefined });
+  useEffect(() => {
+    readiness.current = { ready, managed: assetProgress !== undefined };
+  }, [ready, assetProgress]);
 
   const commandProgress = Math.min(
     Math.max((elapsedMs - COMMAND_START_MS) / (COMMAND_END_MS - COMMAND_START_MS), 0),
@@ -101,7 +112,9 @@ export default function LoadingScreen({
       setElapsedMs(Math.min(elapsed, TOTAL_DURATION_MS));
       setProgress(nextProgress);
 
-      if (elapsed < TOTAL_DURATION_MS) {
+      const { ready: assetsReady, managed } = readiness.current;
+      const minimumDuration = managed ? OUTPUT_END_MS + COMPLETE_HOLD_DURATION_MS : TOTAL_DURATION_MS;
+      if (elapsed < minimumDuration || (!assetsReady && elapsed < 35000)) {
         animationFrame = window.requestAnimationFrame(tick);
         return;
       }
@@ -137,6 +150,8 @@ export default function LoadingScreen({
     <section
       className={cn(styles.loaderScreen, isExiting && styles.loaderScreenExit)}
       aria-label="Loading portfolio"
+      role="status"
+      aria-live="polite"
     >
       <div className={styles.loaderScreenInner}>
         <div className={styles.loaderScreenTerminalFrame}>
@@ -196,7 +211,12 @@ export default function LoadingScreen({
         </div>
 
         <div className={styles.loaderScreenMeta}>
-          <p className={styles.loaderScreenProgress}>{progress}%</p>
+          <p className={styles.loaderScreenProgress}>{assetProgress ?? progress}%</p>
+          {assetProgress !== undefined && (
+            <p className="mt-3 text-xs text-[var(--portfolio-muted)]">
+              {degraded ? "Continuing with available media." : "Preparing portrait and selected work."}
+            </p>
+          )}
           {!hasLottieError ? (
             <LoaderLottieBoundary onError={() => setHasLottieError(true)}>
               <div className={styles.loaderScreenAnimation} aria-hidden="true">
