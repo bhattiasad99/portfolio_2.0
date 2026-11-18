@@ -23,7 +23,16 @@ const PROJECTS = [
   },
   { title: "Project two", category: "AI & automation" },
   { title: "Project three", category: "Cloud & integrations" },
+  { title: "Project four", category: "Data & analytics" },
+  { title: "Project five", category: "Web applications" },
 ];
+
+const PROJECT_SCROLL_START = 0.74;
+const PROJECT_SCROLL_END = 0.98;
+
+function getIntroDistance(width: number, height: number) {
+  return height * (width < 760 ? 4.8 : 5.5);
+}
 
 function segment(value: number, start: number, end: number) {
   return Math.min(1, Math.max(0, (value - start) / (end - start)));
@@ -68,11 +77,28 @@ export default function Hero({ showContent, media }: HeroProps) {
     let portraitLeft = 0;
     let portraitTop = 0;
     let startY = 0;
-    let scrollDistance = 1;
+    let introDistance = 1;
+    let projectOffset = 0;
     let travel = 0;
 
     const updateScroll = () => {
-      target = segment(window.scrollY, startY, startY + scrollDistance);
+      if (motionQuery.matches) return;
+      const distance = window.scrollY - startY;
+      const projectStart = introDistance * PROJECT_SCROLL_START;
+      // One vertical pixel advances the pinned rail by one horizontal pixel.
+      const nextOffset = Math.min(travel, Math.max(0, distance - projectStart));
+      if (nextOffset !== projectOffset) {
+        projectOffset = nextOffset;
+        track.style.transform = `translate3d(${-projectOffset}px, 0, 0)`;
+      }
+
+      target = distance < projectStart
+        ? segment(distance, 0, introDistance)
+        : gsap.utils.interpolate(
+            PROJECT_SCROLL_START,
+            PROJECT_SCROLL_END,
+            travel > 0 ? projectOffset / travel : 1,
+          );
     };
 
     const measure = () => {
@@ -88,8 +114,15 @@ export default function Hero({ showContent, media }: HeroProps) {
         : width * 0.96 - portraitWidth;
       portraitTop = height - portraitHeight;
       startY = section.getBoundingClientRect().top + window.scrollY;
-      scrollDistance = Math.max(1, section.offsetHeight - height);
-      travel = Math.max(0, track.scrollWidth - width + (mobile ? 24 : 64));
+      if (motionQuery.matches) {
+        section.style.removeProperty("--sequence-height");
+        return;
+      }
+
+      introDistance = getIntroDistance(width, height);
+      travel = Math.max(0, track.offsetLeft + track.offsetWidth - width);
+      const pinnedDistance = introDistance * PROJECT_SCROLL_START + travel;
+      section.style.setProperty("--sequence-height", `${height + pinnedDistance}px`);
       portrait.style.width = `${portraitWidth}px`;
       portrait.style.height = `${portraitHeight}px`;
       portrait.style.left = `${portraitLeft}px`;
@@ -131,9 +164,6 @@ export default function Hero({ showContent, media }: HeroProps) {
       work.style.opacity = String(workOpacity);
       work.inert = workOpacity < 0.98;
       work.style.visibility = workOpacity === 0 ? "hidden" : "visible";
-      // Projects arrive after the reveal. The later scroll scrubs both the clip
-      // and horizontal rail, with independent ranges and no autonomous playback.
-      track.style.transform = `translate3d(${-travel * segment(p, 0.74, 0.98)}px,0,0)`;
     };
 
     const tick = (_time: number, deltaTime: number) => {
@@ -146,7 +176,7 @@ export default function Hero({ showContent, media }: HeroProps) {
         previousProgress = progress;
       }
       const seekTime =
-        segment(progress, 0.66, 0.98) *
+        segment(progress, 0.66, PROJECT_SCROLL_END) *
         Math.max(0, (video.duration || 0) - 0.045);
       if (
         video.readyState >= 2 &&
@@ -165,6 +195,7 @@ export default function Hero({ showContent, media }: HeroProps) {
         [portrait, copy, nav, reveal, surface, work, track].forEach((element) =>
           element.removeAttribute("style"),
         );
+        projectOffset = 0;
         copy.inert = false;
         nav.inert = false;
         work.inert = false;
@@ -191,6 +222,7 @@ export default function Hero({ showContent, media }: HeroProps) {
       gsap.ticker.remove(tick);
       gsap.killTweensOf(Array.from(track.children));
       observer.disconnect();
+      section.style.removeProperty("--sequence-height");
       window.removeEventListener("scroll", updateScroll);
       window.removeEventListener("resize", measure);
       motionQuery.removeEventListener("change", onMotionChange);
@@ -249,7 +281,7 @@ export default function Hero({ showContent, media }: HeroProps) {
 
   const exploreWork = () => {
     const section = sectionRef.current!;
-    const height = viewportRef.current!.clientHeight;
+    const { clientWidth: width, clientHeight: height } = viewportRef.current!;
     const top = section.getBoundingClientRect().top + window.scrollY;
     const reduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -259,7 +291,7 @@ export default function Hero({ showContent, media }: HeroProps) {
       return;
     }
     window.scrollTo({
-      top: top + (section.offsetHeight - height) * 0.65,
+      top: top + getIntroDistance(width, height) * 0.65,
       behavior: "smooth",
     });
   };
